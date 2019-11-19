@@ -4,10 +4,11 @@ CLIPS Python bindings
 This is a fork on `CLIPS Python bindings <https://github.com/noxdafox/clipspy>`_ providing a simple rules based reasoning
 flow based on CLIPS and management for scaling up the use of multiple rules engines.
 
+---------------------
+
 **Remark**
 
     Read the `Auracog Rules User Guide <doc/user_guide/auracog_rules_user_guide.rst>`_ for a description on this functionality.
-
 ---------------------
 
 
