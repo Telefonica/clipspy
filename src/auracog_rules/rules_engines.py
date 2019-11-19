@@ -201,7 +201,7 @@ class RulesEngine(TicToc):
               ```
               (<fact_name> (<property_name|key> <value>))
               ```
-              Asserting ordered facts requires the coresponding deftemplate to be defined in the rules engine.
+              Asserting unordered facts requires the corresponding deftemplate to be defined in the rules engine.
               Additionally, the corresponding types of the slots/multislots defined in the deftempaltes must be
               compatible with the types of the values.
               Example:
@@ -220,7 +220,7 @@ class RulesEngine(TicToc):
               (deftemplate (slot id) (multislot requests))
               ```
 
-        Is important to note that the values of the facts not allowed to be dictionaries or plain objects. For example,
+        It is important to note that the values of the facts are not allowed to be dictionaries or plain objects. For example,
         the following fact specification is not valid:
         ```
           {"user":
