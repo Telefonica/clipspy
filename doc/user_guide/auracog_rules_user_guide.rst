@@ -333,9 +333,9 @@ would return
     ]
 
 
-.. note::
+**Note**
 
-    The values of ordered facts are returned as lists and those of unordered facts as dictionaries.
+    **The values of ordered facts are returned as lists and those of unordered facts as dictionaries.**
 
 
 
