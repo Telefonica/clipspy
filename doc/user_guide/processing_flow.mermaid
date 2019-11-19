@@ -1,0 +1,21 @@
+graph TD
+  Create_pool(Create Rules Engines Pool)
+  Acquire_engine(Acquire Rules Engine)
+  Assert_facts[Assert facts]
+  Reason[Reason]
+  Collect_fact_results[Collect Fact Results]
+  Release_engine(Release Rules Engine)
+
+  style Create_pool fill:#99f,stroke:#000,stroke-width:2px
+  style Acquire_engine fill:#99f,stroke:#000,stroke-width:2px
+  style Release_engine fill:#99f,stroke:#000,stroke-width:2px
+
+  style Assert_facts fill:#9f9,stroke:#000,stroke-width:2px
+  style Reason fill:#9f9,stroke:#000,stroke-width:2px
+  style Collect_fact_results fill:#9f9,stroke:#000,stroke-width:2px
+
+  Create_pool --> Acquire_engine
+  Acquire_engine --> Assert_facts
+  Assert_facts --> Reason
+  Reason --> Collect_fact_results
+  Collect_fact_results --> Release_engine
