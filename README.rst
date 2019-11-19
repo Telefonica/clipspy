@@ -4,6 +4,13 @@ CLIPS Python bindings
 This is a fork on `CLIPS Python bindings <https://github.com/noxdafox/clipspy>`_ providing a simple rules based reasoning
 flow based on CLIPS and management for scaling up the use of multiple rules engines.
 
+.. note::
+
+    Read the `Auracog Rules User Guide`_ for a description on this functionality.
+
+.. _User Guide: doc/user_guide/auracog_rules_user_guide.rst
+
+
 ---------------------
 
 
@@ -55,9 +62,9 @@ Provide a flow based interface for easy use of rules engines:
       consecutive invocations to the pool. A reset operation is automatically done after engine release.
       **All engines in the pool are identical**.
 
-    - Statefull: The internal state is saved for every engine in the pool. The programmer is responsible for the rules
+    - Stateful: The internal state is saved for every engine in the pool. The programmer is responsible for the rules
       state management.
-      **All enignes in the pool are different** since they may have a completely different internal state. Threfore,
+      **All engines in the pool are different** since they may have a completely different internal state. Threfore,
       engine instances must be named until finally released. A **persistence** mechanism for engine state is needed.
 
 
