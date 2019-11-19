@@ -1,6 +1,12 @@
 CLIPS Python bindings
 =====================
 
+This is a fork on `CLIPS Python bindings <https://github.com/noxdafox/clipspy>`_ providing a simple rules based reasoning
+flow based on CLIPS and management for scaling up the use of multiple rules engines.
+
+---------------------
+
+
 Python CFFI_ bindings for the ‘C’ Language Integrated Production System CLIPS_ 6.30.
 
 :Source: https://github.com/noxdafox/clipspy
@@ -21,57 +27,76 @@ Initially developed at NASA’s Johnson Space Center, CLIPS is a rule-based prog
 
 CLIPSPy brings CLIPS capabilities within the Python ecosystem.
 
+
+New Features (Work on Progress)
+-------------------------------
+
+Provide a flow based interface for easy use of rules engines:
+
+- RulesEngine class encapsulating reasoning flows in three steps:
+
+  1. set_facts() / set_slots()
+
+     Assert facts to the rules engine.
+
+  2. reason()
+
+     Execute rules chaining on the current facts (rules based reasoning).
+
+  3. collect_fact_values() / collect_resulting_slots
+
+     Get the resulting facts containing reasoning results.
+
+- Rules Engine Pool:
+
+  - Two modes:
+
+    - Stateless: The internal state (working memory, agenda, etc...) of the rules engines is not kept between two
+      consecutive invocations to the pool. A reset operation is automatically done after engine release.
+      **All engines in the pool are identical**.
+
+    - Statefull: The internal state is saved for every engine in the pool. The programmer is responsible for the rules
+      state management.
+      **All enignes in the pool are different** since they may have a completely different internal state. Threfore,
+      engine instances must be named until finally released. A **persistence** mechanism for engine state is needed.
+
+
+
 Installation
 ------------
+
+Linux
++++++
+
+On Linux, CLIPSPy is packaged for `x86_64` architectures as a wheel according to PEP-513_ guidelines.
+Most of the distributions should be supported.
+
+.. code:: bash
+
+    $ [sudo] pip install clipspy
 
 Windows
 +++++++
 
-CLIPSPy comes as a wheel for most of the Python versions and architectures. Therefore, it can be installed from Pip.
+CLIPSPy comes as a wheel for most of the Python versions and architectures.
 
 .. code:: batch
 
     > pip install clipspy
 
-Linux
-+++++
-
-Debian and derivates
-********************
-
-CLIPS 6.30 is available as Debian package in Unstable.
-
-.. code:: bash
-
-    # apt install libclips libclips-dev
-    # pip install clipspy
-
 The *libclips* and *libclips-dev* packages are available for download in the `linux_libs <linux_libs>`_ folder.
 
 Building from sources
-*********************
++++++++++++++++++++++
 
 The provided Makefile takes care of retrieving the CLIPS source code and compiling the Python bindings together with it.
 
 .. code:: bash
 
     $ make
-    # make install
+    $ sudo make install
 
-The following tools are required to build the sources.
-
- - gcc
- - make
- - wget
- - unzip
- - python
- - python-cffi
-
-The following conditional variables are accepted by the Makefile.
-
- - PYTHON: Python interpreter to use, default `python`
- - CLIPS_SOURCE_URL: Location from where to retrieve CLIPS source code archive.
- - SHARED_LIBRARY_DIR: Path where to install CLIPS shared library, default `/usr/lib`
+Please check the documentation_ for more information regarding building CLIPSPy from sources.
 
 Example
 -------
@@ -115,3 +140,5 @@ Example
 
 .. _CLIPS: http://www.clipsrules.net/
 .. _CFFI: https://cffi.readthedocs.io/en/latest/index.html
+.. _PEP-513: https://www.python.org/dev/peps/pep-0513/
+.. _documentation: https://clipspy.readthedocs.io
