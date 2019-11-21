@@ -409,7 +409,7 @@ This method can be used in two ways:
 
 It is possible to have access to some lower level properties of the rules engine through the property `env`. This is an
 instance of `clips.Environment`. Refer to (https://clipspy.readthedocs.io/en/latest/clips.html#module-clips.environment)
-mor further information.
+for further information.
 
 Examples:
 
