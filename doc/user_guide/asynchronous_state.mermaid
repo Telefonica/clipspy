@@ -1,0 +1,27 @@
+graph TD
+  World(("World"))
+  Context_t["Context /<br> State (t)"]
+  Context_t1["Context /<br> State (t+1)"]
+  Assert_t["Assert Facts"]
+  Reason["Reason"]
+  Context_delta_t["Context Delta"]
+  Add((+))
+  Update_slots_and_reason["Update Slots <br>and Reason"]
+  Context_delta_t1["Context Delta"]
+  Next((...))
+
+  style World fill:#ff9,stroke:#000,stroke-width:2px
+
+  World -- 1. asynchronous <br>state update --> Context_t
+  Context_t -- 2 --> Assert_t
+  Assert_t -- 3 --> Reason
+  Reason -- 4 --> Context_delta_t
+  Context_delta_t -- 5 --> Add
+  Context_t -- 5 --> Add
+  Add -- 5 --> Context_t1
+  Context_t1 -. 5' .-> World
+  World -- "6. asynchronous <br>state update" --> Context_t1
+  Reason -. 3' .-> World
+  Context_t1 -- 7 --> Update_slots_and_reason
+  Update_slots_and_reason -- 8 --> Context_delta_t1
+  Context_delta_t1 -.-> Next

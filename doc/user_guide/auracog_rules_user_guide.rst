@@ -481,18 +481,121 @@ Examples:
 ```````````````````````````
 In some cases it is necessary to reason on state-like data structures. In other words:
 
-- There exist an information structure formed by slot-like elements.
+- There exists an information structure formed by slot-like elements.
 - Its properties are key-value pairs.
 - These properties are fixed in the sense that they are not created or erased but simply their values may change.
 
-Working with a rules engine on this kind of structures is tricky ...
+This state-like data may be modified during the reasoning stage. However, these modifications should not result into
+duplicating the facts representing the state information. This usually results in modifying already asserted facts
+which may lead to the re-firing on some rules. Therefore, the re-firing of rules should also be minimized.
 
-**TODO**
+To facilitate this kind of reasoning:
+
+1. Load the module `clips_modules/slots_control.clp <../../clips_modules/slots_control.clp>`_
+
+   This module defines the function `assert_unique_slot`:code: (and an easier to write alias `aus`:code:). This
+   function asserts one unordered fact with name `slot`:code: with this structure:
+   ::
+
+     (slot <slot_name> <slot_value>+)
+
+   Examples:
+
+   ::
+
+     (aus "pizza_size" "gib") -> (slot "pizza_size" "big")
+     (aus "pizza ingredients" "tomato" "cheese" "pepperoni") -> (slot "pizza ingredients" "tomato" "cheese" "pepperoni")
+
+   The special name *slot* is reserved to identify these slot-like information elements.
+
+2. Use the method `set_slots()`:code: in `RulesEngine` class to insert data into the rules engine from the
+
+   This method writes the content of a dictionary or a list as unordered facts of type `slot`:code: into the working
+   memory. This method asserts the facts as special unordered facts with the following structure:
+   ::
+
+     (slot <slot_name> <slot_value>+)
+
+   Only simple Python types or lists can be asserted in this way.
+   If list types are used, the resulting slots has an ordered list of values.
+
+   Slots can be specified in two ways:
+
+     - As a dictionary:
+       ::
+
+        {
+            "pizza_size": "big",
+            "pizza_ingredients": ["cheese", "pepperoni", "tomato"]
+            ...
+        }
+
+     - As a list of tuples/lists:
+       ::
+
+        [
+            ["pizza_size", "big"],
+            ["pizza_ingredients", ["cheese", "pepperoni", "tomato"]]
+            ...
+        ]
+
+3. Use the method `collect_resulting_slots()`:code: in `RulesEngine` class to collect the results.
+
+   Return the **slot changes** in the current working memory with respect to a dictionary of initial slots.
+   Only unordered `slot`:code: facts are involved. Therefore, make sure that all the initial_slots are
+   actually asserted as `slots`:code:.
+
+   For instance, if we use rules to normalize the fields `content_name`:code:, `season_number`:code: and
+   `episode_number`:code:, transforming `content_name: "Mad Men"`:code: -> `normalized_name: "mad men"`:code:,
+   `season_number: "third season"`:code: -> `season_number: 3`:code:
+
+   .. code:: python
+
+       state = {
+            "content_name": "Mad Men",
+            "normalized_name":  None,
+            "episode_number": 2,
+            "season_number": "third season"
+       }
+       re.set_slots(state)
+       state_changes = re.collect_resulting_slots(d)
+
+   the resulting `state_changes`:code: variable would contain
+
+   .. code:: python
+
+      state_changes = {
+            "normalized name": "mad men",
+            "season_number": 2
+      }
 
 
+2.3. Dealing with the Asynchronous Context
+``````````````````````````````````````````
 
-2.3. Dealing with Asynchronous Context
-``````````````````````````````````````
+The actions performed during the reasoning may result in modifications to the surrounding world which may also result in
+an asynchronous update of some states depending directly from these external world elements. This situation is depicted
+in the following diagram:
 
-**TODO**
+.. figure:: asynchronous_state_simple.mermaid.png
 
+
+These asynchronous updates to the context:
+1. need to be detected
+2. need to be processed and used in further reasoning.
+
+These actions are performed by the method `update_slots_and_reason()`:code:.
+This method updates the values of a set of slots and reasons on these changes again (run the rules engine).
+It takes the following parameters:
+
+- `updated_slots_dict`:code:: Dictionary with the updated slots, as resulting from the method  (key: slot name,
+  value: new slot value).
+- `reason_limit`:code:: Maximum number of reasoning cycles allowed.
+
+This method returns a dictionary with the slot values changed (created, retracted or modified) with respect to the
+previous context state.
+
+With this method it is possible to respond to asychronous updates to the context/state information managed by a rules
+engine, making it able to incrementally update and reason, as shown in the following diagram:
+
+.. figure:: asynchronous_state.mermaid.png
