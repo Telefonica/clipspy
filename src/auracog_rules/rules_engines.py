@@ -119,8 +119,9 @@ class RulesEngine(TicToc):
         Write the content of a dictionary or a list as unordered facts of type "slot" into the working memory.
         This method asserts the facts as special unordered facts with the following structure:
             ```
-            (slot <slot_name> <slot_value>)
+            (slot <slot_name> <slot_value>+)
             ```
+
         This way of asserting facts has a limitation: only simple Python types or lists can be asserted.
         If list types are used, the resulting slots has an ordered list of values. E.g.:
             ```
