@@ -67,18 +67,15 @@ class TicToc(object):
 
 class RulesEngine(TicToc):
     """
-    Reasoner on RasAura slots.
+    This class models a rules engine.
+    It provides a simple interface to insert data into the engine, execute the rules chaining (reasoning) and to
+    collect the results.
+    It also provides adaptation between CLIPS and Python data types.
 
-    The following special facts are used:
-
-    - Slot fact, with format
-        (slot <slot_name> <slot_value>)
-    - Call function format:
-        (call_f <function_name> [<positional_argument>]*)
-    - Write into a slot the resulting value of the invocation of a function, with format
-        (set_slot_f <slot_name> <function_name> [<positional_argument>]*)
-      The result of this will be the assertion of the fact (slot <slot_name> <slot_value>) where <slot_value> is the
-      value returned by the call <function_name>([<propositional_argument>]*)
+    Two modes of working are provided:
+    - Regular mode: Just asert facts, reason and collect results relying on the CLIPS features.
+    - Slots mode: Reason on state-like slot-type information. For further information on this mode, please refer to the
+      user guide in documentation.
     """
 
     def __init__(self, rules_files: List[Text], functions_package_name: Text= None):
