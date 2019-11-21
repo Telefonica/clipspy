@@ -67,18 +67,15 @@ class TicToc(object):
 
 class RulesEngine(TicToc):
     """
-    Reasoner on RasAura slots.
+    This class models a rules engine.
+    It provides a simple interface to insert data into the engine, execute the rules chaining (reasoning) and to
+    collect the results.
+    It also provides adaptation between CLIPS and Python data types.
 
-    The following special facts are used:
-
-    - Slot fact, with format
-        (slot <slot_name> <slot_value>)
-    - Call function format:
-        (call_f <function_name> [<positional_argument>]*)
-    - Write into a slot the resulting value of the invocation of a function, with format
-        (set_slot_f <slot_name> <function_name> [<positional_argument>]*)
-      The result of this will be the assertion of the fact (slot <slot_name> <slot_value>) where <slot_value> is the
-      value returned by the call <function_name>([<propositional_argument>]*)
+    Two modes of working are provided:
+    - Regular mode: Just asert facts, reason and collect results relying on the CLIPS features.
+    - Slots mode: Reason on state-like slot-type information. For further information on this mode, please refer to the
+      user guide in documentation.
     """
 
     def __init__(self, rules_files: List[Text], functions_package_name: Text= None):
@@ -122,8 +119,9 @@ class RulesEngine(TicToc):
         Write the content of a dictionary or a list as unordered facts of type "slot" into the working memory.
         This method asserts the facts as special unordered facts with the following structure:
             ```
-            (slot <slot_name> <slot_value>)
+            (slot <slot_name> <slot_value>+)
             ```
+
         This way of asserting facts has a limitation: only simple Python types or lists can be asserted.
         If list types are used, the resulting slots has an ordered list of values. E.g.:
             ```
@@ -201,7 +199,7 @@ class RulesEngine(TicToc):
               ```
               (<fact_name> (<property_name|key> <value>))
               ```
-              Asserting ordered facts requires the coresponding deftemplate to be defined in the rules engine.
+              Asserting unordered facts requires the corresponding deftemplate to be defined in the rules engine.
               Additionally, the corresponding types of the slots/multislots defined in the deftempaltes must be
               compatible with the types of the values.
               Example:
@@ -220,7 +218,7 @@ class RulesEngine(TicToc):
               (deftemplate (slot id) (multislot requests))
               ```
 
-        Is important to note that the values of the facts not allowed to be dictionaries or plain objects. For example,
+        It is important to note that the values of the facts are not allowed to be dictionaries or plain objects. For example,
         the following fact specification is not valid:
         ```
           {"user":

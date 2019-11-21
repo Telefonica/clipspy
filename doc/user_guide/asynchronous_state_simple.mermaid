@@ -1,0 +1,12 @@
+graph LR
+  World(("World"))
+  Context["Context /<br> State"]
+  Assert["Assert Facts"]
+  Reason["Reason"]
+
+  style World fill:#ff9,stroke:#000,stroke-width:2px
+
+  World -- asynchronous <br>state update --> Context
+  Context --> Assert
+  Assert --> Reason
+  Reason -. actions .-> World

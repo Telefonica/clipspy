@@ -6,6 +6,12 @@ flow based on CLIPS and management for scaling up the use of multiple rules engi
 
 ---------------------
 
+Remark
+------
+
+    Read the `Auracog Rules User Guide <doc/user_guide/auracog_rules_user_guide.rst>`_ for a description on this functionality.
+---------------------
+
 
 Python CFFI_ bindings for the ‘C’ Language Integrated Production System CLIPS_ 6.30.
 
@@ -55,9 +61,9 @@ Provide a flow based interface for easy use of rules engines:
       consecutive invocations to the pool. A reset operation is automatically done after engine release.
       **All engines in the pool are identical**.
 
-    - Statefull: The internal state is saved for every engine in the pool. The programmer is responsible for the rules
+    - Stateful: The internal state is saved for every engine in the pool. The programmer is responsible for the rules
       state management.
-      **All enignes in the pool are different** since they may have a completely different internal state. Threfore,
+      **All engines in the pool are different** since they may have a completely different internal state. Threfore,
       engine instances must be named until finally released. A **persistence** mechanism for engine state is needed.
 
 
