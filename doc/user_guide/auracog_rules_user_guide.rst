@@ -2,7 +2,7 @@ Auracog Rules. Integrating CLIPS with Python
 ============================================
 
 This document explains how to easily integrate the use of CLIPS rules engines into python. This can be done using the
-`RulesEngine`and the `RulesEnginePool` classes.
+`RulesEngine`:code: and the `RulesEnginePool`:code: classes.
 
 The following diagram summarizes the steps to use rules engines in python code:
 
