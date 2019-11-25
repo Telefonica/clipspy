@@ -19,6 +19,7 @@ The following diagram summarizes the steps to use rules engines in python code:
 1. Basic Features
 -----------------
 
+`Example notebook <../../notebooks/example_suggestions.ipynb>`_ for further details.
 
 1.1. Create Rules Engine Pool
 `````````````````````````````
