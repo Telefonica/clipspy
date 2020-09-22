@@ -38,29 +38,33 @@ def read(fname):
 
 def package_version():
     """Get the package version via Git Tag."""
-    version_path = os.path.join(os.path.dirname(__file__), 'version.py')
+    version_path = os.path.join(os.path.dirname(__file__), 'version.txt')
 
     version = read_version(version_path)
-    write_version(version_path, version)
+    # write_version(version_path, version)
 
     return version
 
 
 def read_version(path):
-    try:
-        return subprocess.check_output(('git', 'describe')).rstrip().decode()
-    except Exception:
-        with open(path) as version_file:
-            version_string = version_file.read().split('=')[-1]
-            return version_string.strip().replace('"', '')
+    # try:
+    #     return subprocess.check_output(('git', 'describe')).rstrip().decode()
+    # except Exception:
+    #     with open(path) as version_file:
+    #         version_string = version_file.read().split('=')[-1]
+    #         return version_string.strip().replace('"', '')
+    with open(path) as version_file:
+        version_string = version_file.read()
+        return version_string.strip()
 
 
 def write_version(path, version):
-    msg = '"""Versioning controlled via Git Tag, check setup.py"""'
-    with open(path, 'w') as version_file:
-        version_file.write(msg + os.linesep + os.linesep +
-                           '__version__ = "{}"'.format(version) +
-                           os.linesep)
+    # msg = '"""Versioning controlled via Git Tag, check setup.py"""'
+    # with open(path, 'w') as version_file:
+    #     version_file.write(msg + os.linesep + os.linesep +
+    #                        '__version__ = "{}"'.format(version) +
+    #                        os.linesep)
+    pass
 
 
 setup(
