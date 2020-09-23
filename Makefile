@@ -1,4 +1,4 @@
-PYTHON			?= python
+PYTHON			?= python3 # Note: Is needed execute with sudo, therefore default python in system will be used (root)
 CLIPS_VERSION		?= 6.31
 # CLIPS_SOURCE_URL	?= "https://downloads.sourceforge.net/project/clipsrules/CLIPS/6.31/clips_core_source_631.zip"
 MAKEFILE_NAME		?= makefile
@@ -33,24 +33,24 @@ clips_source:
 #	ld -G clips_source/*.o -o clips_source/libclips.so
 #endif
 clips: clips_source
-	dpkg-deb -xv libclips-dev* clips_source # Extract data contained in debian packages downloaded previously
-	dpkg-deb -xv libclips* clips_source
+	dpkg-deb -xv libclips-dev_* clips_source # Extract data contained in debian packages downloaded previously
+	dpkg-deb -xv libclips_* clips_source
 
 clipspy: clips
 	$(PYTHON) setup.py build_ext
 
 test: clipspy
 	cp build/lib.*/clips/_clips*.so clips
-	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:clips_source			       \
+	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:clips_source/usr/lib			       \
 		$(PYTHON) -m pytest -v
 
 install-clips: clips
 	install -d $(SHARED_INCLUDE_DIR)/
-	install -m 644 clips_source/**/clips.h $(SHARED_INCLUDE_DIR)/
+	install -m 644 clips_source/usr/include/clips/clips.h $(SHARED_INCLUDE_DIR)/
 	install -d $(SHARED_INCLUDE_DIR)/clips
-	install -m 644 clips_source/**/*.h $(SHARED_INCLUDE_DIR)/clips/
+	install -m 644 clips_source/usr/include/clips/*.h $(SHARED_INCLUDE_DIR)/clips/
 	install -d $(SHARED_LIBRARY_DIR)/
-	install -m 644 clips_source/**/libclips.so                                \
+	install -m 644 clips_source/usr/lib/libclips.so                                \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)
 	ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so.6
@@ -61,7 +61,12 @@ install-clips: clips
 install: clipspy install-clips
 	$(PYTHON) setup.py install
 
+build: clipspy install-clips
+	$(PYTHON) setup.py bdist_wheel
+
 clean:
 	# -rm clips.zip
-	-rm libclips* # Remove libclips and libclips-dev libraries
-	-rm -fr clips_source build dist clipspy.egg-info
+	-rm -f libclips* # Remove libclips and libclips-dev libraries
+	-rm -fr clips_source build dist clipspy.egg-info .eggs
+	-rm -f /usr/local/lib/libclips.so* # Remove libclips.so libclips.so.6 libclips.so.6.31
+	-rm -fr $(SHARED_INCLUDE_DIR)/clips.h $(SHARED_INCLUDE_DIR)/clips
