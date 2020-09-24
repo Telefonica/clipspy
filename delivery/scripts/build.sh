@@ -11,7 +11,6 @@ DIST_FOLDER="${PROJECT_ROOT_FOLDER}/dist"
 CURRENT_LOCAL_VERSION="$(cat "${PROJECT_ROOT_FOLDER}/version.txt")"
 ARTIFACTORY_TARGET_FOLDER="${WORKSPACE}/target/artifactory/${LIBRARY_NAME}/${CURRENT_LOCAL_VERSION}"
 
-apt-get install libffi-dev
 pip install -r "${PROJECT_ROOT_FOLDER}/requirements.txt"
 
 echo "*******************************"
