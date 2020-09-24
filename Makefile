@@ -67,6 +67,6 @@ build: clipspy install-clips
 clean:
 	# -rm clips.zip
 	-rm -f libclips* # Remove libclips and libclips-dev libraries
-	-rm -fr clips_source build dist clipspy.egg-info .eggs
+	-rm -fr clips_source build dist clipspy.egg-info .eggs .pytest_cache
 	-rm -f /usr/local/lib/libclips.so* # Remove libclips.so libclips.so.6 libclips.so.6.31
 	-rm -fr $(SHARED_INCLUDE_DIR)/clips.h $(SHARED_INCLUDE_DIR)/clips
