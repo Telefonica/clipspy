@@ -2,4 +2,4 @@
 export PYTHONPATH=./:../src:../examples
 
 run-suggestions-example:
-	python auracog_suggestions/test/test_rules_based_suggestions.py
+	python auracog_suggestions/example_rules_based_suggestions.py
