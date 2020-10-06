@@ -3,7 +3,7 @@
 set -e
 set -x
 
-LIBRARY_NAME="clipspy"
+LIBRARY_NAME="aura-clipspy"
 SCRIPT_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT_FOLDER="${SCRIPT_FOLDER}/../.."
 DIST_FOLDER="${PROJECT_ROOT_FOLDER}/dist"

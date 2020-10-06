@@ -15,8 +15,9 @@ all: clips_source clips clipspy
 clips_source:
 	# wget -O clips.zip $(CLIPS_SOURCE_URL)
 	# unzip -jo clips.zip -d clips_source
-	apt-get download libclips-dev # Download needed libraries in current directory
-	apt-get download libclips
+	apt-get update
+	apt-get download aura-libclips-dev # Download needed libraries in current directory
+	apt-get download aura-libclips
 
 #ifeq ($(PLATFORM),Darwin) # macOS
 #clips: clips_source
@@ -33,8 +34,8 @@ clips_source:
 #	ld -G clips_source/*.o -o clips_source/libclips.so
 #endif
 clips: clips_source
-	dpkg-deb -xv libclips-dev_* clips_source # Extract data contained in debian packages downloaded previously
-	dpkg-deb -xv libclips_* clips_source
+	dpkg-deb -xv aura-libclips-dev_* clips_source # Extract data contained in debian packages downloaded previously
+	dpkg-deb -xv aura-libclips_* clips_source
 
 clipspy: clips
 	$(PYTHON) setup.py build_ext
@@ -66,7 +67,7 @@ build: clipspy install-clips
 
 clean:
 	# -rm clips.zip
-	-rm -f libclips* # Remove libclips and libclips-dev libraries
+	-rm -f aura-libclips* # Remove aura-libclips and aura-libclips-dev libraries
 	-rm -fr clips_source build dist clipspy.egg-info .eggs .pytest_cache
 	-rm -f /usr/local/lib/libclips.so* # Remove libclips.so libclips.so.6 libclips.so.6.31
 	-rm -fr $(SHARED_INCLUDE_DIR)/clips.h $(SHARED_INCLUDE_DIR)/clips

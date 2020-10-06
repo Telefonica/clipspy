@@ -68,7 +68,7 @@ def write_version(path, version):
 
 
 setup(
-    name="clipspy",
+    name="aura-clipspy",
     version="{}".format(package_version()),
     author="Matteo Cafasso",
     author_email="noxdafox@gmail.com",
