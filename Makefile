@@ -15,7 +15,7 @@ all: clips_source clips clipspy
 clips_source:
 	# wget -O clips.zip $(CLIPS_SOURCE_URL)
 	# unzip -jo clips.zip -d clips_source
-	apt-get update
+	# apt-get update
 	apt-get download aura-libclips-dev # Download needed libraries in current directory
 	apt-get download aura-libclips
 
