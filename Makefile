@@ -60,10 +60,10 @@ install-clips: clips
 	-sudo ldconfig -n -v $(SHARED_LIBRARY_DIR) # https://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
 
 install: clipspy install-clips
-	$(PYTHON) setup.py install
+	sudo $(PYTHON) setup.py install
 
 build: clipspy install-clips
-	$(PYTHON) setup.py bdist_wheel
+	sudo $(PYTHON) setup.py bdist_wheel
 
 clean:
 	# -rm clips.zip
