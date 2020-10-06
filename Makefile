@@ -15,7 +15,7 @@ all: clips_source clips clipspy
 clips_source:
 	# wget -O clips.zip $(CLIPS_SOURCE_URL)
 	# unzip -jo clips.zip -d clips_source
-	# apt-get update
+	sudo apt-get update
 	apt-get download aura-libclips-dev # Download needed libraries in current directory
 	apt-get download aura-libclips
 
@@ -46,18 +46,18 @@ test: clipspy
 		$(PYTHON) -m pytest -v
 
 install-clips: clips
-	install -d $(SHARED_INCLUDE_DIR)/
-	install -m 644 clips_source/usr/include/clips/clips.h $(SHARED_INCLUDE_DIR)/
-	install -d $(SHARED_INCLUDE_DIR)/clips
-	install -m 644 clips_source/usr/include/clips/*.h $(SHARED_INCLUDE_DIR)/clips/
-	install -d $(SHARED_LIBRARY_DIR)/
-	install -m 644 clips_source/usr/lib/libclips.so                                \
+	sudo install -d $(SHARED_INCLUDE_DIR)/
+	sudo install -m 644 clips_source/usr/include/clips/clips.h $(SHARED_INCLUDE_DIR)/
+	sudo install -d $(SHARED_INCLUDE_DIR)/clips
+	sudo install -m 644 clips_source/usr/include/clips/*.h $(SHARED_INCLUDE_DIR)/clips/
+	sudo install -d $(SHARED_LIBRARY_DIR)/
+	sudo install -m 644 clips_source/usr/lib/libclips.so                                \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)
-	ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
+	sudo ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so.6
-	ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
+	sudo ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so
-	-ldconfig -n -v $(SHARED_LIBRARY_DIR) # https://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
+	-sudo ldconfig -n -v $(SHARED_LIBRARY_DIR) # https://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
 
 install: clipspy install-clips
 	$(PYTHON) setup.py install
