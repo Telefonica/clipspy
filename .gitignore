@@ -13,3 +13,4 @@ GTAGS
 *.egg-info/
 *_clips.c
 dist/
+.idea/

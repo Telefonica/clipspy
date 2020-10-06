@@ -33,38 +33,42 @@ from setuptools import find_packages, setup
 
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(os.path.join(os.path.dirname(__file__), fname), encoding="utf-8").read()
 
 
 def package_version():
     """Get the package version via Git Tag."""
-    version_path = os.path.join(os.path.dirname(__file__), 'version.py')
+    version_path = os.path.join(os.path.dirname(__file__), 'version.txt')
 
     version = read_version(version_path)
-    write_version(version_path, version)
+    # write_version(version_path, version)
 
     return version
 
 
 def read_version(path):
-    try:
-        return subprocess.check_output(('git', 'describe')).rstrip().decode()
-    except Exception:
-        with open(path) as version_file:
-            version_string = version_file.read().split('=')[-1]
-            return version_string.strip().replace('"', '')
+    # try:
+    #     return subprocess.check_output(('git', 'describe')).rstrip().decode()
+    # except Exception:
+    #     with open(path) as version_file:
+    #         version_string = version_file.read().split('=')[-1]
+    #         return version_string.strip().replace('"', '')
+    with open(path) as version_file:
+        version_string = version_file.read()
+        return version_string.strip()
 
 
 def write_version(path, version):
-    msg = '"""Versioning controlled via Git Tag, check setup.py"""'
-    with open(path, 'w') as version_file:
-        version_file.write(msg + os.linesep + os.linesep +
-                           '__version__ = "{}"'.format(version) +
-                           os.linesep)
+    # msg = '"""Versioning controlled via Git Tag, check setup.py"""'
+    # with open(path, 'w') as version_file:
+    #     version_file.write(msg + os.linesep + os.linesep +
+    #                        '__version__ = "{}"'.format(version) +
+    #                        os.linesep)
+    pass
 
 
 setup(
-    name="clipspy",
+    name="aura-clipspy",
     version="{}".format(package_version()),
     author="Matteo Cafasso",
     author_email="noxdafox@gmail.com",
@@ -73,9 +77,9 @@ setup(
     long_description=read('README.rst'),
     packages=find_packages(),
     ext_package="clips",
+    python_requires='>=3',
     setup_requires=["cffi>=1.0.0"],
     install_requires=["cffi>=1.0.0"],
-    extras_require={":python_version<'3'": ["enum34"]},
     cffi_modules=["clips/clips_build.py:ffibuilder"],
     include_dirs=["/usr/include/clips", "/usr/local/include/clips"],
     data_files=[('lib', ['lib/clips.c', 'lib/clips.cdef'])],
@@ -83,7 +87,6 @@ setup(
     url="https://github.com/noxdafox/clipspy",
     classifiers=[
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Development Status :: 4 - Beta",
