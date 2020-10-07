@@ -15,7 +15,7 @@ all: clips_source clips clipspy
 clips_source:
 	# wget -O clips.zip $(CLIPS_SOURCE_URL)
 	# unzip -jo clips.zip -d clips_source
-	sudo apt-get update
+	-sudo apt-get update
 	apt-get download aura-libclips-dev # Download needed libraries in current directory
 	apt-get download aura-libclips
 
@@ -64,6 +64,8 @@ install: clipspy install-clips
 
 build: clipspy install-clips
 	sudo $(PYTHON) setup.py bdist_wheel
+	# https://clipspy.readthedocs.io/en/latest/#manylinux-wheels
+	# sudo ./manylinux/build-wheels.sh
 
 clean:
 	# -rm clips.zip
@@ -71,3 +73,4 @@ clean:
 	-rm -fr clips_source build dist clipspy.egg-info .eggs .pytest_cache
 	-rm -f /usr/local/lib/libclips.so* # Remove libclips.so libclips.so.6 libclips.so.6.31
 	-rm -fr $(SHARED_INCLUDE_DIR)/clips.h $(SHARED_INCLUDE_DIR)/clips
+	-rm -fr aura_clipspy.egg-info wheelhouse
