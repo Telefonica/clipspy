@@ -4,6 +4,7 @@ CLIPS_VERSION		?= 6.31
 MAKEFILE_NAME		?= makefile
 SHARED_INCLUDE_DIR	?= /usr/local/include
 SHARED_LIBRARY_DIR	?= /usr/local/lib
+USER  ?= $(shell whoami)
 
 # platform detection
 # PLATFORM = $(shell uname -s)
@@ -45,27 +46,35 @@ test: clipspy
 	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:clips_source/usr/lib			       \
 		$(PYTHON) -m pytest -v
 
-install-clips: clips
-	sudo install -d $(SHARED_INCLUDE_DIR)/
-	sudo install -m 644 clips_source/usr/include/clips/clips.h $(SHARED_INCLUDE_DIR)/
-	sudo install -d $(SHARED_INCLUDE_DIR)/clips
-	sudo install -m 644 clips_source/usr/include/clips/*.h $(SHARED_INCLUDE_DIR)/clips/
-	sudo install -d $(SHARED_LIBRARY_DIR)/
-	sudo install -m 644 clips_source/usr/lib/libclips.so                                \
+# install-clips: clips
+install-clips:
+	install -d $(SHARED_INCLUDE_DIR)/
+	install -m 644 clips_source/usr/include/clips/clips.h $(SHARED_INCLUDE_DIR)/
+	install -d $(SHARED_INCLUDE_DIR)/clips
+	install -m 644 clips_source/usr/include/clips/*.h $(SHARED_INCLUDE_DIR)/clips/
+	install -d $(SHARED_LIBRARY_DIR)/
+	install -m 644 clips_source/usr/lib/libclips.so                                \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)
-	sudo ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
+	ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so.6
-	sudo ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
+	ln -s $(SHARED_LIBRARY_DIR)/libclips.so.$(CLIPS_VERSION)	       \
 	 	$(SHARED_LIBRARY_DIR)/libclips.so
-	-sudo ldconfig -n -v $(SHARED_LIBRARY_DIR) # https://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
+	-ldconfig -n -v $(SHARED_LIBRARY_DIR) # https://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
 
 install: clipspy install-clips
-	sudo $(PYTHON) setup.py install
+	$(PYTHON) setup.py install
 
-build: clipspy install-clips
-	sudo $(PYTHON) setup.py bdist_wheel
+build: clips
+	# sudo $(PYTHON) setup.py bdist_wheel
 	# https://clipspy.readthedocs.io/en/latest/#manylinux-wheels
-	# sudo ./manylinux/build-wheels.sh
+	# Docker in docker -> run --volume /var/run/docker.sock:/var/run/docker.sock
+	sudo docker build -t aura-clipspy-build-wheels:latest -f manylinux/Dockerfile .
+	sudo docker run -v `pwd`/manylinux/wheelhouse:/io/wheelhouse aura-clipspy-build-wheels:latest
+	mkdir dist
+	cp manylinux/wheelhouse/aura_clipspy-*manylinux2010_x86_64.whl dist
+	# python -m twine check dist/aura_clipspy-1.0.0-cp36-cp36m-linux_x86_64.whl
+	# python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+	# pip install --index-url https://test.pypi.org/simple/ aura_clipspy
 
 clean:
 	# -rm clips.zip
@@ -73,4 +82,4 @@ clean:
 	-rm -fr clips_source build dist clipspy.egg-info .eggs .pytest_cache
 	-rm -f /usr/local/lib/libclips.so* # Remove libclips.so libclips.so.6 libclips.so.6.31
 	-rm -fr $(SHARED_INCLUDE_DIR)/clips.h $(SHARED_INCLUDE_DIR)/clips
-	-rm -fr aura_clipspy.egg-info wheelhouse
+	-rm -fr aura_clipspy.egg-info manylinux/wheelhouse
