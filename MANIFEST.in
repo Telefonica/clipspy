@@ -1,1 +1,2 @@
-include version.py LICENSE.txt
+include version.txt
+include LICENSE.txt

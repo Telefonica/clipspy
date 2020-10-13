@@ -9,7 +9,8 @@ flow based on CLIPS and management for scaling up the use of multiple rules engi
 Remark
 ------
 
-    Read the `Auracog Rules User Guide <doc/user_guide/auracog_rules_user_guide.rst>`_ for a description on this functionality.
+    Read the `Auracog Rules User Guide <doc/user_guide/auracog_rules_user_guide.rst>`_ for a description on this \ functionality.
+
 ---------------------
 
 
@@ -96,11 +97,23 @@ Building from sources
 +++++++++++++++++++++
 
 The provided Makefile takes care of retrieving the CLIPS source code and compiling the Python bindings together with it.
+Also, run a manylinux (CentOS 6) docker container to build a functional self-contained clipspy library with the needed
+system libraries to be installed in a 64 bits linux machine. The steps that should be done are:
+
+1. Build clipspy library.
 
 .. code:: bash
 
-    $ make
-    $ sudo make install
+    $ sudo make build
+
+2. Copy the generated clispy library from **dist** directory to the required repository.
+
+3. Remove generated files to clean local project to return it to the initial state.
+
+.. code:: bash
+
+    $ sudo make clean
+
 
 Please check the documentation_ for more information regarding building CLIPSPy from sources.
 
