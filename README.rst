@@ -115,7 +115,6 @@ system libraries to be installed in a 64 bits linux machine. The steps that shou
     $ sudo make clean
 
 
-
 Please check the documentation_ for more information regarding building CLIPSPy from sources.
 
 Example
